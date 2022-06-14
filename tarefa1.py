@@ -29,12 +29,16 @@ class algcom:
     
     def Newton(self):
         x = [1,0,0]
-        x - np.array(x)
+        x = np.array(x)
         maxiter = 1000
         while maxiter:
             J = self.Jacobiana(x)
             F = self.Funcao(x)
-            deltax = - np.linalg.inv(J)@F
+            try:
+                deltax = - np.linalg.inv(J)@F
+            except:
+                self.erro = "The matrix J generated was a Sigunlar matrix"
+                return 
             x = x + deltax
             tolk = np.linalg.norm(deltax)/ np.linalg.norm(x)
             maxiter -= 1
@@ -42,9 +46,43 @@ class algcom:
                 return x
         self.erro = "convergence not reached"
         return  
+    def Broyden(self):
+        x = [1,0,0]
+        x = np.array(x)
+        B = self.Jacobiana(x)
+        maxiter = 1000
+        while maxiter:
+            J = B.copy()
+            F = self.Funcao(x)
+            try:
+                deltax = - np.linalg.inv(J)@F
+            except:
+                self.erro = "The matrix B generated was a Sigunlar matrix"
+                return
+            x = x + deltax
+            Y = self.Funcao(x) - F
+            tolk = np.linalg.norm(deltax)/ np.linalg.norm(x)
+            maxiter -= 1
+            if tolk < self.tolm:
+                return x
+            else:
+                B = B + ((Y-B@deltax)@(deltax.T))/((deltax.T)@deltax)
+        self.erro = "convergence not reached"
+        return  
 
     def output(self):
-        pass
+        if self.icod == 1:
+            x = self.Newton()
+        elif self.icod == 2:
+            x = self.Broyden()
+        with open("output.txt", "w") as arquivo:
+            if self.erro == 0:
+                arquivo.write(f"X: {x}\n")
+            else:             
+                arquivo.write(f"Erro: {self.erro}\n")
+
+          
+
 
 icod = int(input('Qual o código da operação?'))
 theta1 = float(input('Qual theta 1?'))
@@ -54,4 +92,4 @@ tolm = float(input('Qual tolerancia?'))
 
     
 teste = algcom(icod, theta1, theta2, tolm) 
-print(teste.Newton())
+teste.output()
