@@ -33,6 +33,7 @@ class algcom:
         maxiter = 1000
         while maxiter:
             J = self.Jacobiana(x)
+            print(J)
             F = self.Funcao(x)
             deltax = - np.linalg.inv(J)@F
             x = x + deltax
