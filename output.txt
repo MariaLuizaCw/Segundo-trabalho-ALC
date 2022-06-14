@@ -1,0 +1,1 @@
+Erro: The matrix B generated was a Sigunlar matrix
