@@ -26,7 +26,7 @@ class algcom:
         f2 = 8*c3**3 + 6*c3*c2**2 + 36*c3*c2*c4 + 108*c3*c4**2 - self.theta1
         f3 = 60*c3**4 + 60*(c3**2)*c2**2+ 576*c2*c4*(c3**2) + 2232*(c3**2)*(c4**2)+ 252*(c4**2)*(c2**2) + 1296*c2*c4**3 + 3348*c4**4 + 24*c4*c2**3 +3*c2 - self.theta2
         return np.array([f1,f2,f3])
-    
+ 
     def Newton(self):
         x = [1,0,0]
         x = np.array(x)
@@ -47,15 +47,14 @@ class algcom:
         self.erro = "convergence not reached"
         return  
     def Broyden(self):
-        x = [1,0,0]
-        x = np.array(x)
-        B = self.Jacobiana(x)
+        x = np.array([1.0, 0, 0])
+        B = np.identity(3)
         maxiter = 1000
         while maxiter:
-            J = B.copy()
+
             F = self.Funcao(x)
             try:
-                deltax = - np.linalg.inv(J)@F
+                deltax = - np.linalg.inv(B)@F
             except:
                 self.erro = "The matrix B generated was a Sigunlar matrix"
                 return
@@ -66,7 +65,9 @@ class algcom:
             if tolk < self.tolm:
                 return x
             else:
-                B = B + ((Y-B@deltax)@(deltax.T))/((deltax.T)@deltax)
+                n1 = (Y-B.dot(deltax))[:, None]
+                n2 = deltax[:, None].T
+                B = B + (n1@n2)/((deltax[:, None].T)@deltax[:, None])
         self.erro = "convergence not reached"
         return  
 

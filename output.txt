@@ -1,1 +1,1 @@
-Erro: The matrix B generated was a Sigunlar matrix
+A derivada é: -45.196300074302876
