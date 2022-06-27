@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
-import matplotlib as plt
+
+import matplotlib.pyplot as plt
 class algcom:
     def __init__(self,passos ,t, m, c,k,a1,a2,a3,w1,w2,w3):
         self.passos = passos #delta t
@@ -34,8 +35,7 @@ class algcom:
         for k in range(qnt):
             if k > 0:
                 tempoAtual[k] = k*h
-                print("tempo Atual:")
-                print(tempoAtual[k])
+
                 k1 = 0.5*h*self.f(tempoAtual[k-1], x[k-1],x_linha[k-1])
                 Q = 0.5*h*(x_linha[k-1] + 0.5*k1)
                 
@@ -58,20 +58,26 @@ class algcom:
     def output(self):
         ys = self.Runge_Kutta()
         y= ys['x']
-        plt.plot(tempo,y)
         y_linha = ys["x'"]
         y_duas_linha = ys["x''"]
         tempo = ys["tempo"]
+        plt.plot(tempo,y)
+        plt.show()
         df = pd.DataFrame(list(zip(tempo,y,y_linha,y_duas_linha)), columns = ["tempo","deslocamento",'velocidade','aceleracao'])
         with open("output.txt", "w") as arquivo:
             arquivo.write(f"Dados lidos:\nPasso de integracao: {self.passos}\nTempo total de integracao: {self.t} segundos\nm:{self.m}\nc: {self.c}\nk: {self.k}\na1: {self.a1}\na2: {self.a2}\na3: {self.a3}\nw1: {self.w1}\nw2: {self.w2}\nw3: {self.w3}\n\nTabela:\n {df}\n")
 
 
-#icod = int(input('Qual o código da operação?'))
-#theta1 = float(input('Qual theta 1?'))
-#theta2 = float(input('Qual theta 2?'))
-#tolm = float(input('Qual tolerancia?'))
-#self,passos ,t, m, c,k,a1,a2,a3,w1,w2,w3
-teste = algcom(10,60,1,0.1,2,1,2,1.5,0.05,1,2) 
+passo = float(input('Qual é o passo de integração?'))
+t = float(input('Qual o tempo total?'))
+m = float(input('m?'))
+c = float(input('c?'))
+k = float(input('k?'))
+a1 = float(input('a1?'))
+a2= float(input('a2?'))
+a3 = float(input('a3?'))
+w1 = float(input('w1?'))
+w2 = float(input('w2?'))
+w3 = float(input('w3?'))
+teste = algcom(0.001,10,1,0.1,2,1,2,1.5,0.05,1,2) 
 teste.output()
-#print(teste.Runge_Kutta())
