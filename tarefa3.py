@@ -19,7 +19,7 @@ class algcom:
     
     def F(self,t):
         
-        return self.a1*np.sin((np.pi*self.w1*t)/180) + self.a2*np.sin((np.pi*self.w2*t)/180) +self.a3*np.cos((np.pi*self.w3*t)/180)
+        return self.a1*np.sin((self.w1*t)) + self.a2*np.sin((self.w2*t)) +self.a3*np.cos((self.w3*t))
         
     def f(self, t, x, x_linha):
         return (self.F(t) - self.c*x_linha - self.k*x)/self.m
@@ -64,8 +64,7 @@ class algcom:
         plt.plot(tempo,y)
         plt.show()
         df = pd.DataFrame(list(zip(tempo,y,y_linha,y_duas_linha)), columns = ["tempo","deslocamento",'velocidade','aceleracao'])
-        with open("output.txt", "w") as arquivo:
-            arquivo.write(f"Dados lidos:\nPasso de integracao: {self.passos}\nTempo total de integracao: {self.t} segundos\nm:{self.m}\nc: {self.c}\nk: {self.k}\na1: {self.a1}\na2: {self.a2}\na3: {self.a3}\nw1: {self.w1}\nw2: {self.w2}\nw3: {self.w3}\n\nTabela:\n {df}\n")
+        df.to_csv('output.csv', index=None)
 
 
 passo = float(input('Qual é o passo de integração?'))
@@ -79,5 +78,6 @@ a3 = float(input('a3?'))
 w1 = float(input('w1?'))
 w2 = float(input('w2?'))
 w3 = float(input('w3?'))
-teste = algcom(0.001,10,1,0.1,2,1,2,1.5,0.05,1,2) 
+teste = algcom(passo,t,m,c,k,a1,a2,a3,w1,w2,w3) 
+
 teste.output()
