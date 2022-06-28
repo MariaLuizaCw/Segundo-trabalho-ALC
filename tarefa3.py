@@ -61,7 +61,10 @@ class algcom:
         y_linha = ys["x'"]
         y_duas_linha = ys["x''"]
         tempo = ys["tempo"]
-        plt.plot(tempo,y)
+        plt.plot(tempo,y, label="deslocamento")
+        plt.plot(tempo,y_linha,  label="velocidade")
+        plt.plot(tempo,y_duas_linha,  label="aceleração")
+        plt.legend()
         plt.show()
         df = pd.DataFrame(list(zip(tempo,y,y_linha,y_duas_linha)), columns = ["tempo","deslocamento",'velocidade','aceleracao'])
         df.to_csv('output.csv', index=None)
